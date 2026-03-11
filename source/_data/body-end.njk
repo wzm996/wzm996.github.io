@@ -2,30 +2,59 @@
 {%- if theme.mermaid.enable and config.mermaid.enable %}
   <script src="https://unpkg.com/mermaid@{{ config.mermaid.version }}/dist/mermaid.min.js"></script>
   <script>
-    if (window.mermaid) {
-      mermaid.initialize({ startOnload: true });
-      // Legacy content (from old NexT) keeps mermaid code as highlighted plaintext.
-      // Convert those blocks to .mermaid and render.
-      (function(){
+    // Legacy content (from old NexT) keeps mermaid code as highlighted plaintext.
+    // Convert those blocks to .mermaid and render.
+    (function(){
+      function normalize(txt) {
+        // drop leading line numbers that Hexo highlight may inject
+        txt = (txt || '').replace(/^\s*\d+\s*\n/gm, '');
+        // common garbage: standalone numbers 1..n as lines
+        txt = txt.replace(/^\s*\d+\s*$/gm, '');
+        return txt.trim();
+      }
+
+      function isMermaid(txt) {
+        return /^\s*(sequenceDiagram|graph\s+LR|graph\s+TD|graph\s+TB|graph\s+BT|gantt|classDiagram|stateDiagram|erDiagram|journey|pie)\b/m.test(txt);
+      }
+
+      function convertBlocks() {
         try {
           var pres = document.querySelectorAll('figure.highlight.plain .code pre');
           var hit = 0;
           pres.forEach(function(pre){
-            var txt = pre.innerText || '';
-            txt = txt.replace(/^\s*\d+\s*\n/gm,'');
-            if (/^\s*(sequenceDiagram|graph\s+LR|graph\s+TD|graph\s+TB|graph\s+BT|gantt|classDiagram|stateDiagram|erDiagram|journey|pie)\b/m.test(txt)) {
-              var div = document.createElement('div');
-              div.className = 'mermaid';
-              div.textContent = txt.trim();
-              pre.parentNode.replaceChild(div, pre);
-              hit++;
-            }
+            var txt = normalize(pre.innerText);
+            if (!txt || !isMermaid(txt)) return;
+            var div = document.createElement('div');
+            div.className = 'mermaid';
+            div.textContent = txt;
+            pre.parentNode.replaceChild(div, pre);
+            hit++;
           });
-          if (hit) {
-            mermaid.run();
-          }
+          return hit;
+        } catch(e) {
+          return 0;
+        }
+      }
+
+      function render() {
+        if (!window.mermaid) return;
+        try {
+          window.mermaid.initialize({ startOnload: false });
+          window.mermaid.run();
         } catch(e) {}
-      })();
-    }
+      }
+
+      function boot() {
+        var hit = convertBlocks();
+        if (hit) render();
+      }
+
+      // Run after full load; this avoids timing issues with NexT/PJAX.
+      window.addEventListener('load', function(){
+        // run twice: once immediately, once a bit later for safety
+        boot();
+        setTimeout(boot, 800);
+      });
+    })();
   </script>
 {%- endif %}
