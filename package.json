@@ -1,0 +1,31 @@
+{
+  "name": "wzm996-blog",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "hexo": {
+    "version": "7.3.0"
+  },
+  "scripts": {
+    "build": "hexo generate",
+    "clean": "hexo clean",
+    "deploy": "hexo deploy",
+    "new:post": "hexo new post",
+    "daily": "node tools/daily-post.cjs",
+    "test": "node tools/validate.cjs"
+  },
+  "dependencies": {
+    "hexo": "^7.3.0",
+    "hexo-cli": "^4.3.2",
+    "hexo-generator-archive": "^2.0.0",
+    "hexo-generator-category": "^2.0.0",
+    "hexo-generator-feed": "^3.0.0",
+    "hexo-generator-index": "^3.0.0",
+    "hexo-generator-tag": "^2.0.0",
+    "hexo-renderer-ejs": "^2.0.0",
+    "hexo-renderer-marked": "^7.0.0",
+    "hexo-renderer-stylus": "^3.0.0",
+    "hexo-server": "^3.0.0",
+    "hexo-theme-next": "^8.22.0"
+  }
+}
