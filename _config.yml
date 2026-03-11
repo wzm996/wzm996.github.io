@@ -1,0 +1,55 @@
+# Hexo config
+# https://hexo.io/docs/configuration
+
+title: 不再、悔
+subtitle: ''
+description: ''
+author: wzm996
+language: zh-CN
+timezone: Asia/Shanghai
+
+# URL
+url: https://wzm996.github.io
+root: /
+permalink: :year/:month/:day/:title/
+permalink_defaults: {}
+
+# Directory
+source_dir: source
+public_dir: public
+
+tag_dir: tags
+archive_dir: archives
+category_dir: categories
+code_dir: downloads/code
+
+i18n_dir: :lang
+skip_render: []
+
+# Writing
+new_post_name: :year-:month-:day-:title.md
+
+default_layout: post
+
+# Theme
+# NexT theme via npm package
+# We'll create _config.next.yml for theme config later.
+theme: next
+
+# Plugins
+plugins:
+  - hexo-generator-index
+  - hexo-generator-archive
+  - hexo-generator-category
+  - hexo-generator-tag
+  - hexo-generator-feed
+
+# Feed
+feed:
+  type: atom
+  path: atom.xml
+  limit: 20
+
+# Deployment
+# We will deploy via GitHub Actions, not hexo deploy.
+deploy: {}
