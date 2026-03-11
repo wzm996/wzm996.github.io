@@ -1,13 +1,14 @@
-{# Mermaid loader for legacy HTML code blocks #}
+{# Mermaid compatibility for legacy posts (old NexT exported mermaid as highlighted plaintext) #}
 {%- if theme.mermaid.enable and config.mermaid.enable %}
-  <script src="https://unpkg.com/mermaid@{{ config.mermaid.version }}/dist/mermaid.min.js"></script>
   <script>
-    // Legacy content (from old NexT) keeps mermaid code as highlighted plaintext.
-    // Convert those blocks to .mermaid and render.
+    // Convert legacy highlighted plaintext blocks (figure.highlight.plain) into
+    // NexT's expected structure: <pre><code class="mermaid">...</code></pre>
+    // IMPORTANT: run on `page:loaded` so it works with PJAX navigation.
     (function(){
       function normalize(txt) {
+        txt = (txt || '');
         // drop leading line numbers that Hexo highlight may inject
-        txt = (txt || '').replace(/^\s*\d+\s*\n/gm, '');
+        txt = txt.replace(/^\s*\d+\s*\n/gm, '');
         // common garbage: standalone numbers 1..n as lines
         txt = txt.replace(/^\s*\d+\s*$/gm, '');
         return txt.trim();
@@ -18,42 +19,40 @@
       }
 
       function convertBlocks() {
-        try {
-          var pres = document.querySelectorAll('figure.highlight.plain .code pre');
-          var hit = 0;
-          pres.forEach(function(pre){
-            var txt = normalize(pre.innerText);
-            if (!txt || !isMermaid(txt)) return;
-            var div = document.createElement('div');
-            div.className = 'mermaid';
-            div.textContent = txt;
-            pre.parentNode.replaceChild(div, pre);
-            hit++;
-          });
-          return hit;
-        } catch(e) {
-          return 0;
-        }
-      }
+        var pres = document.querySelectorAll('figure.highlight.plain .code pre');
+        pres.forEach(function(pre){
+          var txt = normalize(pre.innerText);
+          if (!txt || !isMermaid(txt)) return;
 
-      function render() {
-        if (!window.mermaid) return;
-        try {
-          window.mermaid.initialize({ startOnload: false });
-          window.mermaid.run();
-        } catch(e) {}
+          var figure = pre.closest('figure.highlight.plain');
+          if (!figure || figure.__mermaidConverted) return;
+
+          var outPre = document.createElement('pre');
+          var outCode = document.createElement('code');
+          outCode.className = 'mermaid';
+          outCode.textContent = txt;
+          outPre.appendChild(outCode);
+
+          figure.parentNode.replaceChild(outPre, figure);
+          figure.__mermaidConverted = true;
+        });
       }
 
       function boot() {
-        var hit = convertBlocks();
-        if (hit) render();
+        try { convertBlocks(); } catch (e) {}
       }
 
-      // Run after full load; this avoids timing issues with NexT/PJAX.
-      window.addEventListener('load', function(){
-        // run twice: once immediately, once a bit later for safety
+      // Works for both first load and PJAX page switches (NexT emits page:loaded)
+      document.addEventListener('page:loaded', function(){
         boot();
-        setTimeout(boot, 800);
+        // run again shortly after in case the post body arrives a tick later
+        setTimeout(boot, 200);
+      });
+
+      // Fallback: if page:loaded isn't fired for some reason
+      window.addEventListener('load', function(){
+        boot();
+        setTimeout(boot, 200);
       });
     })();
   </script>
