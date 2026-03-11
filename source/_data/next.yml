@@ -1,0 +1,55 @@
+# NexT 5.1.4 config (legacy), close to 2018-12/2019-01 appearance
+
+custom_file_path:
+  bodyEnd: source/_data/next-body-end.swig
+
+
+scheme: Mist
+
+# Sidebar
+sidebar:
+  position: left
+  display: post
+  offset: 12
+  b2t: false
+  scrollpercent: false
+  onmobile: false
+
+# Effects
+fancybox: true
+motion:
+  enable: true
+  async: false
+
+# Background
+canvas_nest: true
+
+# Math
+mathjax:
+  enable: true
+  per_page: false
+
+# Mermaid
+mermaid:
+  enable: true
+
+# Live2D "little cat" widget (2019-01 snapshot)
+live2d:
+  enable: true
+  scriptFrom: local
+  pluginRootPath: live2dw/
+  pluginJsPath: lib/
+  pluginModelPath: assets/
+  tagMode: false
+  debug: false
+  model:
+    jsonPath: /live2dw/assets/tororo.model.json
+  display:
+    position: right
+    width: 150
+    height: 300
+  mobile:
+    show: true
+  react:
+    opacityDefault: 0.7
+    opacityOnHover: 0.2
