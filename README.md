@@ -82,12 +82,6 @@ tags:
 - 工作流：`.github/workflows/Deploy Hexo site to Pages`
 - 触发：push 到 `master`
 
-## 常见问题
-
-### 1) 菜单点击出现 `/%20` 这种 404
-
-NexT v5 的菜单配置里 `||` 两侧不要留空格（例如用 `/||home` 而不是 `/ || home`），否则可能生成带空格编码的路径。
-
 ---
 
 如需调整主题样式、菜单项、或分类体系，请直接提 PR 修改配置与文章 front-matter。
