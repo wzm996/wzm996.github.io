@@ -1,9 +1,38 @@
-# Alternate theme config for NexT
-custom_file_path:
-  bodyEnd: source/_data/body-end.njk
+# NOTE: NexT 5.x reads config from source/_data/next.yml when using --config.
+# NexT 5.x (legacy) config restored to match 2018-2019 look
+# Docs: https://github.com/theme-next/hexo-theme-next/tree/v5.1.4
 
+# Theme scheme (2018 used Mist)
+scheme: Mist
+
+# Enable fancybox like old site
+fancybox: true
+
+# Sidebar
+sidebar:
+  position: left
+  display: post
+  offset: 12
+  b2t: false
+  scrollpercent: false
+  onmobile: false
+
+# Motion effects (old default)
+motion:
+  enable: true
+  async: false
+
+# Canvas Nest background effect (present in 2018)
+canvas_nest: true
+
+# MathJax (present in 2018 build)
+mathjax:
+  enable: true
+  per_page: false
+
+# Mermaid (keep current behavior)
 mermaid:
   enable: true
-  theme:
-    light: default
-    dark: dark
+
+# Custom injected files
+# For NexT 5.x, use source/_data/next/body-end.swig
