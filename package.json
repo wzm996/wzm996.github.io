@@ -29,6 +29,7 @@
     "hexo-theme-next": "^8.22.0"
   },
   "devDependencies": {
+    "hexo-filter-mermaid-diagrams": "^1.0.5",
     "hexo-tag-mermaid": "^1.0.0"
   }
 }

@@ -55,6 +55,11 @@ feed:
 # We will deploy via GitHub Actions, not hexo deploy.
 deploy: {}
 
-# Mermaid (for legacy posts)
+# Mermaid
+# - Used by hexo-filter-mermaid-diagrams (render old inline mermaid blocks)
+# - Also used by NexT theme mermaid loader
 mermaid:
   enable: true
+  version: "11.4.1"
+  options:
+    startOnload: true
