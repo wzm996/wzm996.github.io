@@ -43,11 +43,16 @@
       }
 
       // Works for both first load and PJAX page switches (NexT emits page:loaded)
+      // Use CAPTURE phase to guarantee this runs before NexT's own mermaid handler.
       document.addEventListener('page:loaded', function(){
         boot();
         // run again shortly after in case the post body arrives a tick later
         setTimeout(boot, 200);
-      });
+      }, true);
+
+      // Also run once immediately in case this script loads after page:loaded
+      // (e.g. browser cache / unusual timing)
+      boot();
 
       // Fallback: if page:loaded isn't fired for some reason
       window.addEventListener('load', function(){
