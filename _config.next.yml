@@ -1,0 +1,9 @@
+# Alternate theme config for NexT
+custom_file_path:
+  bodyEnd: source/_data/body-end.njk
+
+mermaid:
+  enable: true
+  theme:
+    light: default
+    dark: dark

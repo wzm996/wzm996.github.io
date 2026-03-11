@@ -1,0 +1,31 @@
+{# Mermaid loader for legacy HTML code blocks #}
+{%- if theme.mermaid.enable and config.mermaid.enable %}
+  <script src="https://unpkg.com/mermaid@{{ config.mermaid.version }}/dist/mermaid.min.js"></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize({ startOnload: true });
+      // Legacy content (from old NexT) keeps mermaid code as highlighted plaintext.
+      // Convert those blocks to .mermaid and render.
+      (function(){
+        try {
+          var pres = document.querySelectorAll('figure.highlight.plain .code pre');
+          var hit = 0;
+          pres.forEach(function(pre){
+            var txt = pre.innerText || '';
+            txt = txt.replace(/^\s*\d+\s*\n/gm,'');
+            if (/^\s*(sequenceDiagram|graph\s+LR|graph\s+TD|graph\s+TB|graph\s+BT|gantt|classDiagram|stateDiagram|erDiagram|journey|pie)\b/m.test(txt)) {
+              var div = document.createElement('div');
+              div.className = 'mermaid';
+              div.textContent = txt.trim();
+              pre.parentNode.replaceChild(div, pre);
+              hit++;
+            }
+          });
+          if (hit) {
+            mermaid.run();
+          }
+        } catch(e) {}
+      })();
+    }
+  </script>
+{%- endif %}
