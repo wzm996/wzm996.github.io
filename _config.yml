@@ -43,6 +43,7 @@ plugins:
   - hexo-generator-category
   - hexo-generator-tag
   - hexo-generator-feed
+  - hexo-tag-mermaid
 
 # Feed
 feed:
@@ -53,3 +54,7 @@ feed:
 # Deployment
 # We will deploy via GitHub Actions, not hexo deploy.
 deploy: {}
+
+# Mermaid (for legacy posts)
+mermaid:
+  enable: true
